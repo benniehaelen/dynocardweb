@@ -130,16 +130,16 @@ export class DataService {
 
     return (error: any): Observable<any> => {
 
-      console.error('error: ', error);
-      console.error(`${operation} failed: ${error.message}`);
+
 
       let errorMessage = error || 'Server error';
 
       if (error.error) {
         // A client-side or network error occurred. Handle it accordingly.
-        console.error('An error occurred:', error.error.message);
-        errorMessage = error.error.message;
-
+        if (error.error.message) {
+          console.error('An error occurred:', error.error.message);
+          errorMessage = error.error.message;
+        }
         // Status Code 0 probable means CORS was not enabled on the API endpoint
       } else if (error.status === 0) {
         // A client-side or network error occurred. Handle it accordingly.
@@ -155,13 +155,22 @@ export class DataService {
         // The response body may contain clues as to what went wrong,
         console.error(
           `Backend returned code ${error.status}, ` +
-          `body was: ${error.error}`);
+          `Body was: ${error.error}`);
       }
+
       // return an observable with a user-facing error message
-      return throwError({
+      const errorObj = {
         message: error.message,
+        requestedUrl: error.error.target.__zone_symbol__xhrURL,
         displayMessage: errorMessage
-      });
+      };
+
+      console.error(`${operation} failed: ${error.message}`);
+      console.error('Error details: ', errorObj);
+      // console.error(`requestedUrl: ${error.error.target.__zone_symbol__xhrURL}`);
+      // console.error('Full error: ', error);
+
+      return throwError(errorObj);
     };
   }
 

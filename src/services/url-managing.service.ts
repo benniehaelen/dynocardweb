@@ -5,7 +5,7 @@
  */
 import { Injectable } from '@angular/core';
 
-const prodUrl = 'https://iotdynocardmoxa.azurewebsites.net';
+const prodUrl = 'http://localhost:8201';
 const hostName: string = prodUrl
 
 @Injectable()
@@ -13,6 +13,6 @@ export class UrlManagingService {
 
   // These are all site root relative
   baseApiRoute: string = hostName + '/api';
-  getDynoCardSampleData: string = this.baseApiRoute + '/DynoCardSampleData';
+  getDynoCardData: string = this.baseApiRoute + '/DynoCard';
 
 }

@@ -35,6 +35,11 @@ export const BASE_PROVIDERS: any[] = [
     BrowserModule,
     HttpClientModule
   ],
+  exports: [
+    CommonModule,
+    BrowserModule,
+    HttpClientModule
+  ]
 })
 export class CoreModule {
   // configuredProviders: *required to configure WindowService and others per platform

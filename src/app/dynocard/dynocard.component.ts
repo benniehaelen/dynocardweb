@@ -116,38 +116,34 @@ export class DynoCardComponent implements OnInit {
   private isDropDownRender: boolean = false;
   private margin = { top: 150, right: 100, bottom: -100, left: 0 }
   private totalAnimationTime: number = 2000;
+  public errorMessage: any;
 
   constructor(private dataService: DataService, private urlManagingService: UrlManagingService) {
     this.svgCanvasWidth = 1200;
     this.svgCanvasHeight = 560;
-    this.loadChartData()
   }
 
   ngOnInit() {
-    this.controls.nativeElement.appendChild(this.createInitialHeader());
-    const animateButton = this.createAnimationButton();
-    document.getElementById("buttonDiv").appendChild(animateButton);
+    this.loadChartData();
   }
 
   async loadChartData() {
-    await this.dataService.get(this.urlManagingService.getDynoCardSampleData, null, { mockData: true }).toPromise()
+    await this.dataService.get(this.urlManagingService.getDynoCardData).toPromise()
 
       .then((response) => {
         this.chartData = response;
-        this.renderChart()
+        this.controls.nativeElement.appendChild(this.createInitialHeader());
+        const animateButton = this.createAnimationButton();
+        document.getElementById('buttonDiv').appendChild(animateButton);
+
+        this.renderChart();
       })
 
       .catch(error => {
-        console.log('DynoCardComponent.loadChartData() Error:', error);
+        console.log('DynoCardComponent.loadChartData() Error');
+        this.errorMessage = error;
         return error;
       });
-  }
-
-  private rowConversion(d, columns) {
-    // const parseTime = d3.timeParse("%Y%m%d");
-
-    for (let i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
-    return d;
   }
 
   private async renderChart() {
