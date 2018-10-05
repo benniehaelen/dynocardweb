@@ -14,5 +14,6 @@ export class UrlManagingService {
   // These are all site root relative
   baseApiRoute: string = hostName + '/api';
   getDynoCardData: string = this.baseApiRoute + '/DynoCard';
+  // getDynoCardData: string = '/assets/Results.json'; // for loading test data locally
 
 }

@@ -65,16 +65,16 @@ export interface VisualUpdateOptions {
 
 // This is an array of column names from the DataSet, the spelling must match exactly
 export class DataColumns {
-  static pumpId = "Pump_ID";
-  static eventId = "Event_ID";
-  static cardHeaderId = "CardHeader_ID";
-  static epocDate = "EPOC_DATE";
-  static startDate = "startDate";
-  static endDate = "endDate";
-  static cardType = "Card_Type";
-  static cardId = "Card_ID";
-  static position = "Position";
-  static load = "Load";
+  static pumpId = 'pump_ID';
+  static eventId = 'event_ID';
+  static cardHeaderId = 'cardHeader_ID';
+  static epocDate = 'epoC_DATE';
+  static startDate = 'startDate';
+  static endDate = 'endDate';
+  static cardType = 'card_Type';
+  static cardId = 'card_ID';
+  static position = 'position';
+  static load = 'load';
 }
 
 @Component({
