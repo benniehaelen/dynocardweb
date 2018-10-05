@@ -85,7 +85,7 @@ export class DataColumns {
 })
 
 export class DynoCardComponent implements OnInit {
-  chartData: any;
+  chartData: DataPoint[];
   @ViewChild('controls') controls: ElementRef;
   //---Power Bi
   private target: HTMLElement;
@@ -281,39 +281,63 @@ export class DynoCardComponent implements OnInit {
     return new Promise((resolve, reject) => {
 
       const dataPoints: DataPoint[] = [];
-      let csvData: DataPoint[] = [];
+      // let jsonData: DataPoint[] = [];
       let retDataView: ViewModel
+      const dataView = this.chartData;
 
-      d3.csv("assets/dataset1.csv")
-      // .row(this.rowConversion) // doesn't seem to need a row conversion function to work
-        .get(function (error, data: DataPoint[]) {
-          if (error) reject(error);
+      retDataView = {
+        dataPoints: dataPoints,
+        maxValue: d3.max(this.chartData, d => d.load)
+      }
 
-          csvData = data;
-          retDataView = {
-            dataPoints: dataPoints,
-            maxValue: d3.max(data, d => d.load)
-          }
+      for (let i = 0; i < dataView.length; i++) {
+        retDataView.dataPoints.push({
+          pumpId: <number>+dataView[i][DataColumns.pumpId],
+          eventId: <number>+dataView[i][DataColumns.eventId],
+          cardHeaderId: <number> +dataView[i][DataColumns.cardHeaderId],
+          epocDate: <number>+dataView[i][DataColumns.epocDate],
+          cardType: <string>dataView[i][DataColumns.cardType],
+          cardId: <number>dataView[i][DataColumns.cardId],
+          position: <number>dataView[i][DataColumns.position],
+          load: <number>+dataView[i][DataColumns.load]
+        });
+      }
 
-          const dataView = csvData;
+      // console.log(retDataView);
+      resolve(retDataView);
 
-          for (let i = 0; i < dataView.length; i++) {
-            retDataView.dataPoints.push({
-              pumpId: <number>+dataView[i][DataColumns.pumpId],
-              eventId: <number>+dataView[i][DataColumns.eventId],
-              cardHeaderId: <number> +dataView[i][DataColumns.cardHeaderId],
-              epocDate: <number>+dataView[i][DataColumns.epocDate],
-              cardType: <string>dataView[i][DataColumns.cardType],
-              cardId: <number>dataView[i][DataColumns.cardId],
-              position: <number>dataView[i][DataColumns.position],
-              load: <number>+dataView[i][DataColumns.load]
-            });
-          }
+      // // Load from CSV
+      // d3.csv("assets/dataset1.csv")
+      // // .row(this.rowConversion) // doesn't seem to need a row conversion function to work
+      //   .get(function (error, data: DataPoint[]) {
+      //     if (error) reject(error);
+      //
+      //     jsonData = data;
+      //     retDataView = {
+      //       dataPoints: dataPoints,
+      //       maxValue: d3.max(data, d => d.load)
+      //     }
+      //
+      //     const dataView = jsonData;
+      //
+      //     for (let i = 0; i < dataView.length; i++) {
+      //       retDataView.dataPoints.push({
+      //         pumpId: <number>+dataView[i][DataColumns.pumpId],
+      //         eventId: <number>+dataView[i][DataColumns.eventId],
+      //         cardHeaderId: <number> +dataView[i][DataColumns.cardHeaderId],
+      //         epocDate: <number>+dataView[i][DataColumns.epocDate],
+      //         cardType: <string>dataView[i][DataColumns.cardType],
+      //         cardId: <number>dataView[i][DataColumns.cardId],
+      //         position: <number>dataView[i][DataColumns.position],
+      //         load: <number>+dataView[i][DataColumns.load]
+      //       });
+      //     }
+      //
+      //     // console.log(retDataView);
+      //     resolve(retDataView);
+      //
+      //   }.bind(this))
 
-          // console.log(retDataView);
-          resolve(retDataView);
-
-        }.bind(this))
     })
   }
 
