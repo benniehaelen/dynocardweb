@@ -128,7 +128,7 @@ export class DynoCardComponent implements OnInit {
   }
 
   async loadChartData() {
-    await this.dataService.get(this.urlManagingService.getDynoCardData).toPromise()
+    await this.dataService.get(await this.urlManagingService.getDynoCardData()).toPromise()
 
       .then((response) => {
         this.chartData = response;
