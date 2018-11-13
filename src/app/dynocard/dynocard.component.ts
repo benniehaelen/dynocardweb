@@ -5,6 +5,7 @@ import { ViewChild, ElementRef } from '@angular/core';
 
 import * as d3 from 'd3';
 import * as _ from 'lodash';
+import 'd3-svg-legend';
 
 // Just import through angular.json "scripts", rather than trying to import here
 declare var $;
@@ -218,27 +219,27 @@ export class DynoCardComponent implements OnInit {
     // Draw X axis line
     const xAxisLine = d3.svg.axis()
       .scale(this.xAxis_Position)
-      .orient('bottom').tickSize(5)
+      .orient('bottom').tickSize(10)
       .tickFormat(d => d);
 
     this.xAxisGroup.call(xAxisLine)
     // .attr("class", "xaxis axis")  // two classes, one for css formatting, one for selection below
       .attr({
-        transform: 'translate(' + 0 + ', ' + (this.svgCanvasHeight - this.svgCanvasPadding) + ')'
+        transform: `translate(0, ${(this.svgCanvasHeight - this.svgCanvasPadding)})`
       });
 
     // Draw Y axis line
     const yAxisLine = d3.svg.axis()
       .scale(this.yAxis_Load)
       .orient('left')
-      .tickSize(5)
+      .tickSize(10)
       .tickFormat(d => (Number(d) / 1000)
         .toString());
 
     this.yAxisGroup.call(yAxisLine)
     // .attr("class", "axis")
       .attr({
-        transform: 'translate(' + this.margin.right + ', ' + 0 + ')'
+        transform: `translate(${this.margin.right}, 0)`
       });
 
     // now rotate text on x axis
@@ -247,21 +248,26 @@ export class DynoCardComponent implements OnInit {
     // then rotate up to get 45 degrees.
     this.dynoCardSvg.selectAll('.x-axis text')  // select all the text elements for the xaxis
       .attr('transform', function (d) {
-        return 'translate(' + this.getBBox().height * -2 + ',' + this.getBBox().height + ')rotate(-45)';
+        return `translate(${this.getBBox().height * -2}, ${this.getBBox().height}) rotate(-45)`;
+      });
+    // Adjust y axis units
+    this.dynoCardSvg.selectAll('.y-axis text')  // select all the text elements for the xaxis
+      .attr('transform', function (d) {
+        return `translate(${this.getBBox().height * -1 + 10}, 0)`;
       });
 
     // add titles to the Y axes
     this.dynoCardSvg.append('text')
       .attr('class', 'axis-label')
       .attr('text-anchor', 'middle')  // this makes it easy to centre the text as the transform is applied to the anchor
-      .attr('transform', 'translate(' + (this.svgCanvasPadding / 2) + ',' + (this.svgCanvasHeight / 2) + ')rotate(-90)')  // text is drawn off the screen top left, move down and out and rotate
+      .attr('transform', `translate(${(this.svgCanvasPadding / 2)}, ${(this.svgCanvasHeight / 2)}) rotate(-90)`)  // text is drawn off the screen top left, move down and out and rotate
       .text('Load (klbs)');
 
     // add titles to the X axes
     this.dynoCardSvg.append('text')
       .attr('class', 'axis-label')
       .attr('text-anchor', 'middle')  // this makes it easy to centre the text as the transform is applied to the anchor
-      .attr('transform', 'translate(' + (this.svgCanvasWidth / 2) + ',' + (this.svgCanvasHeight - (this.svgCanvasPadding / 4 )) + ')')  // centre below axis
+      .attr('transform', `translate(${(this.svgCanvasWidth / 2)}, ${(this.svgCanvasHeight - (this.svgCanvasPadding / 4))})`)  // centre below axis
       .text('Displacement (in)');
 
     //-- Define Path Draw function
@@ -281,11 +287,47 @@ export class DynoCardComponent implements OnInit {
     // }.bind(this), 2000);
 
 
-    //   // create a Legend
+    // create a Legend
+    const ordinal = d3.scale.ordinal()
+      .domain(['Surface Chart', 'Pump Chart'])
+      .range(['#4682b4', '#a52a2a']);
+
+
+    this.dynoCardSvg.append('g')
+      .attr('class', 'legend')
+      .attr('transform', 'translate(140,25)');
+
+
+    // .attr('transform', function (d) {
+    //     return `translate(${this.getBBox().height * -2}, ${this.getBBox().height}) rotate(-45)`;
+    //   });
+    // Reposition and resize the box
+
+
+    const legendPadding = this.dynoCardSvg.attr('data-style-padding') || 5,
+      legend = this.dynoCardSvg.selectAll('.legend'),
+      legendItems = this.dynoCardSvg.selectAll('.legendCells').data([true]);
+
+    legend.append('rect').classed('legend-box', true);
+
+    const legendBox = this.dynoCardSvg.selectAll('.legend-box')
+      .attr('x', -20)
+      .attr('y', -20)
+      .attr('height', 75)
+      .attr('width', 150);
+
+    const legendOrdinal = (d3 as any).legend.color()// no type definition for d3 legend
+    //d3 symbol creates a path-string, for example
+    //"M0,-8.059274488676564L9.306048591020996,
+    //8.059274488676564 -9.306048591020996,8.059274488676564Z"
+      .shape('path', d3.svg.symbol().type('circle').size(150)(null))
+      .shapePadding(20)
+      .scale(ordinal);
+
+    this.dynoCardSvg.select('.legend')
+      .call(legendOrdinal);
     //   const legend = this.dynoCardSvg.append("g")
     //     .attr("class","legend")
-    //     .attr("transform","translate(50,30)")
-    //     .style("font-size","12px")
     //     .call(d3legend)
   }
 
