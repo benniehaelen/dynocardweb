@@ -287,32 +287,26 @@ export class DynoCardComponent implements OnInit {
     // }.bind(this), 2000);
 
 
-    // create a Legend
+    // Create a Legend
     const ordinal = d3.scale.ordinal()
       .domain(['Surface Chart', 'Pump Chart'])
       .range(['#4682b4', '#a52a2a']);
 
-
+    const legendLeftOffset = 140;
     this.dynoCardSvg.append('g')
       .attr('class', 'legend')
-      .attr('transform', 'translate(140,25)');
+      .attr('transform', `translate(${this.svgCanvasWidth - this.svgCanvasPadding - 32},22)`);
 
-
-    // .attr('transform', function (d) {
-    //     return `translate(${this.getBBox().height * -2}, ${this.getBBox().height}) rotate(-45)`;
-    //   });
     // Reposition and resize the box
+    // legendPadding = this.dynoCardSvg.attr('data-style-padding') || 5,
+    // legendItems = this.dynoCardSvg.selectAll('.legendCells').data([true]);
 
-
-    const legendPadding = this.dynoCardSvg.attr('data-style-padding') || 5,
-      legend = this.dynoCardSvg.selectAll('.legend'),
-      legendItems = this.dynoCardSvg.selectAll('.legendCells').data([true]);
-
+    const legend = this.dynoCardSvg.selectAll('.legend');
     legend.append('rect').classed('legend-box', true);
 
-    const legendBox = this.dynoCardSvg.selectAll('.legend-box')
-      .attr('x', -20)
-      .attr('y', -20)
+    // .legend-box moves relative to the .legend
+    this.dynoCardSvg.selectAll('.legend-box')
+      .attr('transform', `translate(-20,-20)`)
       .attr('height', 75)
       .attr('width', 150);
 
