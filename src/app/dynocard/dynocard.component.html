@@ -3,7 +3,15 @@
   <div>Error: {{ errorMessage.message }}</div>
   <div>Requested Url: {{ errorMessage.requestedUrl }}</div>
 </h4>
-<div *ngIf="!errorMessage">
+<div *ngIf="!errorMessage" class="chart-container">
   <div #controls></div>
-  <svg width="960" height="800"></svg>
+  <svg></svg>
+  <div class="legend">
+    <div>
+      <div class="circle surface"></div>Surface Chart
+    </div>
+    <div>
+      <div class="circle pump"></div>Pump Chart
+    </div>
+  </div>
 </div>

@@ -118,3 +118,30 @@ path {
   font-weight : 700;
 }
 
+.legend {
+  border : 1px solid #000000;
+  margin : auto;
+  width  : 200px;
+}
+
+.chart-container {
+  width : 1200px;
+}
+
+
+.legend .circle {
+  height         : 25px;
+  width          : 25px;
+  border-radius  : 50%;
+  vertical-align : middle;
+  display        : inline-block;
+  margin         : 8px 10px;
+}
+
+.circle.surface {
+  background-color : #4682b4;
+}
+
+.circle.pump {
+  background-color : #a52a2a;
+}
