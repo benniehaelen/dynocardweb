@@ -89,9 +89,28 @@ path {
 }
 
 .legend {
-  font-size   : 20px;
+  font-size   : 17px;
   font-weight : 700;
+  border      : 1px solid #000000;
+  margin      : auto;
+  width       : 340px;
+  text-align  : center;
 }
+
+.legend-item {
+  margin : 0 7px;
+}
+
+
+.legend .circle {
+  height         : 25px;
+  width          : 25px;
+  border-radius  : 50%;
+  vertical-align : middle;
+  display        : inline-block;
+  margin         : 8px 10px 8px 0;
+}
+
 
 .legend rect {
   fill    : #fff;
@@ -118,25 +137,11 @@ path {
   font-weight : 700;
 }
 
-.legend {
-  border : 1px solid #000000;
-  margin : auto;
-  width  : 200px;
-}
 
 .chart-container {
   width : 1200px;
 }
 
-
-.legend .circle {
-  height         : 25px;
-  width          : 25px;
-  border-radius  : 50%;
-  vertical-align : middle;
-  display        : inline-block;
-  margin         : 8px 10px;
-}
 
 .circle.surface {
   background-color : #4682b4;
